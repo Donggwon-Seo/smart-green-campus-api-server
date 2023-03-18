@@ -52,4 +52,8 @@ public class SensingDataService {
     public List<SensingData> findAll() {
         return sensingDataRepository.findAll();
     }
+
+    public List<SensingData> findAllByMember() {
+        return sensingDataRepository.findAllByMembeer();
+    }
 }

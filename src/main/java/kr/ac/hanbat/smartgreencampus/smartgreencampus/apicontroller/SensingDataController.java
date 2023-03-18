@@ -23,13 +23,13 @@ public class SensingDataController {
     @GetMapping("/api/data")
     public Result data() {
 
-        List<SensingData> sensingDataList = sensingDataService.findAll();
+        List<SensingData> sensingDataList = sensingDataService.findAllByMember();
 
-        List<DataDto> dataDtos = sensingDataList.stream()
-                .map(data -> new DataDto(data.getName(), data.getSensingValue(), data.getKind().toString(), data.getLocation().getBuilding(), data.getLocation().getDetails()))
+        List<DataDto> dataDtoList = sensingDataList.stream()
+                .map(data -> new DataDto(data))
                 .collect(Collectors.toList());
 
-        return new Result(dataDtos);
+        return new Result(dataDtoList);
     }
 
 
@@ -70,6 +70,16 @@ public class SensingDataController {
         private String kind;
         private String building; //Location
         private String details;  //Location
+        private String maker;
+
+        public DataDto(SensingData data) {
+            this.name = data.getName();
+            this.value = data.getSensingValue();
+            this.kind = String.valueOf(data.getKind());
+            this.building = data.getLocation().getBuilding();
+            this.details = data.getLocation().getDetails();
+            this.maker = data.getMember().getName();
+        }
     }
 
     @Data
