@@ -31,4 +31,9 @@ public class SensingDataRepository {
         return em.createQuery("select d from SensingData d", SensingData.class)
                 .getResultList();
     }
+
+    public List<SensingData> findAllByMembeer() {
+        return em.createQuery("select d from SensingData d join fetch d.member m", SensingData.class)
+                .getResultList();
+    }
 }
