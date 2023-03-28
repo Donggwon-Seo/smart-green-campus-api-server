@@ -1,10 +1,9 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller;
 
 import jakarta.validation.Valid;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.member.*;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.Member;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.service.MemberService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,57 +32,29 @@ public class MemberController {
     /* 회원 등록 */
     @PostMapping("/api/members")
     public CreateMemberResponse saveMember(
-            @RequestBody @Valid CreateMemberRequest request) {
+            @RequestBody @Valid final CreateMemberRequest request) {
 
-        Long id = memberService.save(request.name, request.password);
+        Long id = memberService.save(request.getName(), request.getPassword());
         return new CreateMemberResponse(id);
     }
 
     /* 회원 수정 */
     @PatchMapping("/api/members/{id}")
     public UpdateMemberResponse updateMember(
-            @PathVariable("id") Long id,
-            @RequestBody @Valid UpdateMemberRequest request) {
+            @PathVariable("id") final Long id,
+            @RequestBody @Valid final UpdateMemberRequest request) {
 
-        memberService.update(id, request.name);
+        memberService.update(id, request.getName());
         Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId(), member.getName());
     }
 
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T contents;
-    }
+    /* 회원 삭제 */
+    @DeleteMapping("/api/members/{id}")
+    public DeleteMemberRequest deleteMember(@PathVariable final Long id) {
 
-    @Data
-    @AllArgsConstructor
-    static class MemberDto {
-        private String name;
-    }
-
-    @Data
-    static class UpdateMemberRequest {
-        private String name;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class UpdateMemberResponse {
-        private Long id;
-        private String name;
-    }
-
-    @Data
-    static class CreateMemberRequest {
-        private String name;
-        private String password;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class CreateMemberResponse {
-        private Long id;
+        memberService.deleteMember(id);
+        return new DeleteMemberRequest(id);
     }
 }

@@ -29,7 +29,7 @@ public class SensingData {
     private Member member;
 
     /* 연관관계 편의 메서드 */
-    public void setMember(Member member) {
+    public void setMember(final Member member) {
 
         this.member = member;
         member.getSensingDataList().add(this);
@@ -54,7 +54,7 @@ public class SensingData {
     }
 
     /* 비즈니스 로직 */
-    public void update(Double value) {
+    public void update(final Double value) {
         this.sensingValue = value;
     }
 }

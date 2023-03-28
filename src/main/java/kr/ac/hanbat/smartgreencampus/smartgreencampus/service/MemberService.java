@@ -36,6 +36,12 @@ public class MemberService {
         member.update(name);
     }
 
+    /* 회원 탈퇴 */
+    @Transactional
+    public void deleteMember(final Long id) {
+        memberRepository.deleteMember(id);
+    }
+
     public Member findById(final Long memberId) {
         return memberRepository.findById(memberId);
     }
