@@ -18,6 +18,12 @@ public class MemberRepository {
         em.persist(member);
     }
 
+
+    public void deleteMember(final Long id) {
+        Member member = findById(id);
+        em.remove(member);
+    }
+
     /* 회원 단건 조회 */
     public Member findById(final Long memberId) {
 

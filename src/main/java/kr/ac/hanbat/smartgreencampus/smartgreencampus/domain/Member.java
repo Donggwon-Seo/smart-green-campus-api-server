@@ -21,7 +21,7 @@ public class Member {
 
     private String password;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<SensingData> sensingDataList = new ArrayList<>();
 
     /* 정적 생성 메서드 */
@@ -38,7 +38,7 @@ public class Member {
      * 비즈니스 로직
      * @param name
      */
-    public void update(String name) {
+    public void update(final String name) {
         this.name = name;
     }
 }
