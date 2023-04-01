@@ -34,7 +34,7 @@ public class MemberController {
     public CreateMemberResponse saveMember(
             @RequestBody @Valid final CreateMemberRequest request) {
 
-        Long id = memberService.save(request.getName(), request.getPassword());
+        Long id = memberService.save(request);
         return new CreateMemberResponse(id);
     }
 

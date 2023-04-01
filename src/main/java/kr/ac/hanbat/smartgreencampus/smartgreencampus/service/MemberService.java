@@ -1,6 +1,8 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.service;
 
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.member.CreateMemberRequest;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.Member;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.NullMemberException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,9 @@ public class MemberService {
      * 회원 저장
      */
     @Transactional
-    public Long save(final String name, final String password) {
+    public Long save(final CreateMemberRequest request) {
 
-        Member member = Member.createMember(name, password);
+        Member member = Member.createMember(request.getName(), request.getPassword());
         memberRepository.save(member);
         return member.getId();
     }
@@ -32,18 +34,20 @@ public class MemberService {
     @Transactional
     public void update(final Long memberId, final String name) {
 
-        Member member = memberRepository.findById(memberId);
+        Member member = findById(memberId);
         member.update(name);
     }
 
     /* 회원 탈퇴 */
     @Transactional
     public void deleteMember(final Long id) {
-        memberRepository.deleteMember(id);
+
+        Member member = findById(id);
+        memberRepository.delete(member);
     }
 
     public Member findById(final Long memberId) {
-        return memberRepository.findById(memberId);
+        return memberRepository.findById(memberId).orElseThrow(NullMemberException::new);
     }
 
     public List<Member> findAll() {
