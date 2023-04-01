@@ -4,6 +4,7 @@ import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingData;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.Location;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.Member;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingKind;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.NullSensingDataException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.repository.SensingDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,19 +42,17 @@ public class SensingDataService {
     @Transactional
     public void update(final Long dataId, final Double value) {
 
-        SensingData sensingData = sensingDataRepository.findById(dataId);
+        SensingData sensingData = findById(dataId);
         sensingData.update(value);
     }
 
     public SensingData findById(Long dataId) {
-        return sensingDataRepository.findById(dataId);
+        return sensingDataRepository.findById(dataId).orElseThrow(NullSensingDataException::new);
     }
 
     public List<SensingData> findAll() {
         return sensingDataRepository.findAll();
     }
 
-    public List<SensingData> findAllByMember() {
-        return sensingDataRepository.findAllByMembeer();
-    }
+    public List<SensingData> findAllByMember() { return sensingDataRepository.findAllByMember(); }
 }

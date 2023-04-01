@@ -1,12 +1,11 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller;
 
 import jakarta.validation.Valid;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.sensingdata.*;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.Location;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingData;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingKind;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.service.SensingDataService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,78 +34,24 @@ public class SensingDataController {
 
     /* 데이터 등록 */
     @PostMapping("/api/data")
-    public CreateDataResponse saveData(@RequestBody @Valid CreateDataRequest request) {
+    public CreateDataResponse saveData(@RequestBody @Valid final CreateDataRequest request) {
 
-        SensingKind kind = SensingKind.transform(request.sensingKind);
-        Location location = Location.createLocation(request.building, request.details);
+        SensingKind kind = SensingKind.transform(request.getSensingKind());
+        Location location = Location.createLocation(request.getBuilding(), request.getDetails());
 
-        Long id = sensingDataService.save(request.memberId, request.name, request.value, kind, location);
+        Long id = sensingDataService.save(request.getMemberId(), request.getName(), request.getValue(), kind, location);
         return new CreateDataResponse(id);
     }
 
     /* 데이터 수정 */
     @PatchMapping("/api/data/{id}")
     public UpdateDataResponse updateDataResponse(
-            @PathVariable("id") Long id,
-            @RequestBody @Valid UpdateDataRequest request) {
+            @PathVariable("id") final Long id,
+            @RequestBody @Valid final UpdateDataRequest request) {
 
-        sensingDataService.update(id, request.value);
+        sensingDataService.update(id, request.getValue());
         SensingData sensingData = sensingDataService.findById(id);
 
         return new UpdateDataResponse(sensingData.getId());
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T contents;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class DataDto {
-        private String name;
-        private Double value;
-        private String kind;
-        private String building; //Location
-        private String details;  //Location
-        private String maker;
-
-        public DataDto(SensingData data) {
-            this.name = data.getName();
-            this.value = data.getSensingValue();
-            this.kind = String.valueOf(data.getKind());
-            this.building = data.getLocation().getBuilding();
-            this.details = data.getLocation().getDetails();
-            this.maker = data.getMember().getName();
-        }
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class UpdateDataResponse {
-        private Long id;
-    }
-
-    @Data
-    static class UpdateDataRequest {
-        private Long dataId;
-        private Double value;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class CreateDataResponse {
-        private Long id;
-    }
-
-    @Data
-    static class CreateDataRequest {
-        private Long memberId;
-        private String name;
-        private Double value;
-        private String sensingKind;
-        private String building; //Location
-        private String details;  //Location
     }
 }
