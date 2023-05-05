@@ -1,4 +1,4 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.nullcheck;
 
 public class NullMemberException extends RuntimeException {
     public NullMemberException() {
