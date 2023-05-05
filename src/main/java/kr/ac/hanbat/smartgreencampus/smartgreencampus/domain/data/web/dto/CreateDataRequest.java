@@ -1,18 +1,11 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.sensingdata;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-public class CreateDataRequest {
-    private Long memberId;
-    private String name;
-    private Double value;
-    private String sensingKind;
-    private String building; //Location
-    private String details;  //Location
-}
+public record CreateDataRequest(
+        @NotNull Long memberId,
+        @NotNull String name,
+        @NotNull Double value,
+        @NotNull String sensingKind,
+        @NotNull String building,
+        @NotNull String details) { }

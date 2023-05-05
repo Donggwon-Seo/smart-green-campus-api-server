@@ -1,13 +1,3 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.member;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.web.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-public class DeleteMemberRequest {
-    private Long id;
-}
+public record DeleteMemberRequest(Long id) { }

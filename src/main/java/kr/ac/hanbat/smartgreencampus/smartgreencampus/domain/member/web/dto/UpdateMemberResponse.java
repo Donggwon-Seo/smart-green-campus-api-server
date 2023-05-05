@@ -1,14 +1,3 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.member;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.web.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UpdateMemberResponse {
-    private Long id;
-    private String name;
-}
+public record UpdateMemberResponse(Long id,String name) { }

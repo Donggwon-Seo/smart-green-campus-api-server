@@ -1,6 +1,6 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.sensingdata;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto;
 
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingData;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingData;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DataDto {
-    private String name;
     private Double value;
     private String kind;
     private String building; //Location
@@ -18,7 +17,6 @@ public class DataDto {
     private String maker;
 
     public DataDto(final SensingData data) {
-        this.name = data.getName();
         this.value = data.getSensingValue();
         this.kind = String.valueOf(data.getKind());
         this.building = data.getLocation().getBuilding();
