@@ -1,56 +1,63 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.sensingdata.*;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.Location;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingData;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingKind;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.service.SensingDataService;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingData;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto.*;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.application.SensingDataService;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApi;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "센싱 데이터")
 @RestController
 @RequiredArgsConstructor
 public class SensingDataController {
 
     private final SensingDataService sensingDataService;
 
-    /* 데이터 조회 */
+    @SwaggerApi(summary = "데이터 목록 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/data")
     public Result data() {
 
-        List<SensingData> sensingDataList = sensingDataService.findAllByMember();
-
-        List<DataDto> dataDtoList = sensingDataList.stream()
+        return new Result(sensingDataService.findAllByMember().stream()
                 .map(data -> new DataDto(data))
-                .collect(Collectors.toList());
-
-        return new Result(dataDtoList);
+                .collect(Collectors.toList()));
     }
 
 
-    /* 데이터 등록 */
+    @SwaggerApi(summary = "특정 종류의 데이터 목록 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
+    @GetMapping("/api/data/kinds")
+    public Result data(@RequestBody @Valid final SensingDataByKindRequest request) {
+
+        return new Result(sensingDataService.findAllByMemberKind(request).stream()
+                .map(data -> new DataDto(data))
+                .collect(Collectors.toList()));
+    }
+
+
+    @SwaggerApi(summary = "데이터 등록", implementation = CreateDataResponse.class)
+    @SwaggerApiFailWithoutAuth
     @PostMapping("/api/data")
     public CreateDataResponse saveData(@RequestBody @Valid final CreateDataRequest request) {
-
-        SensingKind kind = SensingKind.transform(request.getSensingKind());
-        Location location = Location.createLocation(request.getBuilding(), request.getDetails());
-
-        Long id = sensingDataService.save(request.getMemberId(), request.getName(), request.getValue(), kind, location);
-        return new CreateDataResponse(id);
+        return new CreateDataResponse(sensingDataService.save(request));
     }
 
-    /* 데이터 수정 */
+
+    @SwaggerApi(summary = "데이터 수정", implementation = UpdateDataResponse.class)
+    @SwaggerApiFailWithoutAuth
     @PatchMapping("/api/data/{id}")
     public UpdateDataResponse updateDataResponse(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateDataRequest request) {
 
-        sensingDataService.update(id, request.getValue());
-        SensingData sensingData = sensingDataService.findById(id);
+        sensingDataService.update(id, request.value());
+        final SensingData sensingData = sensingDataService.findById(id);
 
         return new UpdateDataResponse(sensingData.getId());
     }

@@ -1,7 +1,9 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.persistence;
 
 import jakarta.persistence.*;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingData;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,17 +21,20 @@ public class Member {
     @Column(unique = true)
     private String name;
 
+    private String email;
     private String password;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<SensingData> sensingDataList = new ArrayList<>();
 
     /* 정적 생성 메서드 */
-    public static Member createMember(final String name, final String password) {
+    @Builder
+    public static Member createMember(final String name, final String password, final String email) {
 
         Member member = new Member();
         member.name = name;
         member.password = password;
+        member.email = email;
 
         return member;
     }

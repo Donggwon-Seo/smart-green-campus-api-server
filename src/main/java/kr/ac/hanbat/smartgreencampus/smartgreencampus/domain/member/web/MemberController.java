@@ -1,60 +1,44 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.web;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.apicontroller.dto.member.*;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.Member;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.service.MemberService;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.persistence.Member;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.web.dto.*;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.application.MemberService;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApi;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
+@Tag(name = "회원")
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    /* 회원 조회 */
-    @GetMapping("/api/members")
-    public Result members() {
-
-        List<Member> members = memberService.findAll();
-
-        List<MemberDto> memberDtos = members.stream()
-                .map(member -> new MemberDto(member.getName()))
-                .collect(Collectors.toList());
-
-        return new Result(memberDtos);
-    }
-
-    /* 회원 등록 */
-    @PostMapping("/api/members")
-    public CreateMemberResponse saveMember(
-            @RequestBody @Valid final CreateMemberRequest request) {
-
-        Long id = memberService.save(request);
-        return new CreateMemberResponse(id);
-    }
-
-    /* 회원 수정 */
+    @SwaggerApi(summary = "닉네임 수정", implementation = ResponseEntity.class)
+    @SwaggerApiFailWithoutAuth
     @PatchMapping("/api/members/{id}")
-    public UpdateMemberResponse updateMember(
+    public ResponseEntity<UpdateMemberResponse> updateMember(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateMemberRequest request) {
 
-        memberService.update(id, request.getName());
+        memberService.update(id, request.name());
         Member member = memberService.findById(id);
 
-        return new UpdateMemberResponse(member.getId(), member.getName());
+        return ResponseEntity.ok(new UpdateMemberResponse(member.getId(), member.getName()));
     }
 
-    /* 회원 삭제 */
+
+    @SwaggerApi(summary = "회원 탈퇴", implementation = ResponseEntity.class)
+    @SwaggerApiFailWithoutAuth
     @DeleteMapping("/api/members/{id}")
-    public DeleteMemberRequest deleteMember(@PathVariable final Long id) {
+    public ResponseEntity<DeleteMemberRequest> deleteMember(@PathVariable final Long id) {
 
         memberService.deleteMember(id);
-        return new DeleteMemberRequest(id);
+        return ResponseEntity.ok(new DeleteMemberRequest(id));
     }
 }

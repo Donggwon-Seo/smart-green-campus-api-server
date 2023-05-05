@@ -1,8 +1,8 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.repository;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence;
 
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.SensingData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,5 +11,9 @@ import java.util.List;
 public interface SensingDataRepository extends JpaRepository<SensingData, Long> {
 
     @Query("select d from SensingData d join fetch d.member m")
-    public List<SensingData> findAllByMember();
+    List<SensingData> findAllByMember();
+
+
+    @Query("select d from SensingData d join fetch d.member m where d.kind = :kind")
+    List<SensingData> findAllByMemberKind(@Param("kind") final SensingKind sensingKind);
 }

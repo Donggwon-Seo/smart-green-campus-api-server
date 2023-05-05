@@ -1,20 +1,24 @@
-package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain;
+package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence;
 
 import jakarta.persistence.*;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.persistence.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SensingData {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
-
-    @Column(unique = true)
-    private String name;
 
     private Double sensingValue;
 
@@ -23,6 +27,13 @@ public class SensingData {
 
     @Embedded
     private Location location;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -35,26 +46,25 @@ public class SensingData {
         member.getSensingDataList().add(this);
     }
 
-    /* 정적 생성 메서드 */
-    public static SensingData createData(
-            final Member member,
-            final String name,
-            final Double value,
+    @Builder
+    public SensingData(
+            final Long id,
+            final Double sensingValue,
             final SensingKind kind,
-            final Location location) {
-
-        SensingData sensingData = new SensingData();
-        sensingData.setMember(member);
-        sensingData.name = name;
-        sensingData.sensingValue = value;
-        sensingData.kind = kind;
-        sensingData.location = location;
-
-        return sensingData;
+            final Location location,
+            final Member member) {
+        this.id = id;
+        this.sensingValue = sensingValue;
+        this.kind = kind;
+        this.location = location;
+        this.member = member;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     /* 비즈니스 로직 */
     public void update(final Double value) {
         this.sensingValue = value;
+        this.updatedAt = LocalDateTime.now();
     }
 }
