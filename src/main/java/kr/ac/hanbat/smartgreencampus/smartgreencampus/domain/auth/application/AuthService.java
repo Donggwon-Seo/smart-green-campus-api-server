@@ -50,7 +50,7 @@ public class AuthService {
     }
 
     private void validateDuplicateNickname(final String nickname) {
-        List<Member> memberList = memberRepository.findValidateMemberByName(nickname);
+        final List<Member> memberList = memberRepository.findValidateMemberByName(nickname);
 
         if (memberList.size() > 0) {
             throw new DuplicateMemberException("닉네임 중복");
@@ -58,7 +58,7 @@ public class AuthService {
     }
 
     private void validateDuplicateEmail(final String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
+        final Optional<Member> member = memberRepository.findByEmail(email);
 
         if (member.isPresent()) {
             throw new DuplicateMemberException("이메일 중복.");
@@ -79,21 +79,5 @@ public class AuthService {
 
         log.info(member.getName() + "님이 로그인 하셨습니다.");
         return jwtTokenProvider.createToken(member.getName());
-    }
-
-
-    /** 로그아웃 */
-    public boolean logout(final HttpServletRequest request) {
-
-        final String token = authExtractor.extract(request, "Bearer");
-
-        try {
-            jwtTokenProvider.addBlackList(token);
-            log.info(jwtTokenProvider.getSubject(token) + "님이 로그아웃 하셨습니다.");
-            return true;
-        } catch (IllegalAccessException exception) {
-            /* do nothing */
-            return false;
-        }
     }
 }
