@@ -13,18 +13,24 @@ import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApiFailWithAuth;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.IllegalValueException;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.jwt.AuthorizationExtractor;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Tag(name = "인증")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
+    private final AuthorizationExtractor authExtractor;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @SwaggerApi(summary = "회원 가입", implementation = SignupResponse.class)
     @SwaggerApiFailWithoutAuth
@@ -50,12 +56,17 @@ public class AuthController {
     @SwaggerApi(summary = "로그아웃", implementation = ResponseEntity.class)
     @SwaggerApiFailWithAuth
     @PostMapping("/api/auth/logout")
-    public ResponseEntity<String> logoutMember(HttpServletRequest request) {
+    public ResponseEntity<Void> logoutMember(HttpServletRequest request) {
+        final String token = authExtractor.extract(request, "Bearer");
 
-        if (authService.logout(request)) {
-            return ResponseEntity.ok("logout success");
-        } else {
-            return ResponseEntity.badRequest().body("bad request");
+        try {
+            jwtTokenProvider.addBlackList(token);
+            log.info(jwtTokenProvider.getSubject(token) + "님이 로그아웃 하셨습니다.");
+
+            return ResponseEntity.ok().build();
+        } catch (IllegalAccessException exception) {
+            /* do nothing */
+            return ResponseEntity.badRequest().build();
         }
     }
 }

@@ -23,10 +23,7 @@ public class SensingData {
     private Double sensingValue;
 
     @Enumerated(value = EnumType.STRING)
-    private SensingKind kind;
-
-    @Embedded
-    private Location location;
+    private Measurement measurement;
 
     @CreatedDate
     @Column(updatable = false)
@@ -48,15 +45,11 @@ public class SensingData {
 
     @Builder
     public SensingData(
-            final Long id,
             final Double sensingValue,
-            final SensingKind kind,
-            final Location location,
+            final Measurement measurement,
             final Member member) {
-        this.id = id;
         this.sensingValue = sensingValue;
-        this.kind = kind;
-        this.location = location;
+        this.measurement = measurement;
         this.member = member;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

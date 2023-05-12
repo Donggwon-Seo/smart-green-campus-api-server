@@ -14,6 +14,6 @@ public interface SensingDataRepository extends JpaRepository<SensingData, Long> 
     List<SensingData> findAllByMember();
 
 
-    @Query("select d from SensingData d join fetch d.member m where d.kind = :kind")
-    List<SensingData> findAllByMemberKind(@Param("kind") final SensingKind sensingKind);
+    @Query("select d from SensingData d join fetch d.member m where d.measurement = :measurement")
+    List<SensingData> findAllByMemberKind(@Param("measurement") final Measurement measurement);
 }
