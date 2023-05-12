@@ -18,7 +18,7 @@ public class DataDto {
 
     public DataDto(final SensingData data) {
         this.value = data.getSensingValue();
-        this.kind = String.valueOf(data.getKind());
+        this.kind = String.valueOf(data.getMeasurement());
         this.building = data.getLocation().getBuilding();
         this.details = data.getLocation().getDetails();
         this.maker = data.getMember().getName();

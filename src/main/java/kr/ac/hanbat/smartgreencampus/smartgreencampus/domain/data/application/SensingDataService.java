@@ -1,12 +1,11 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.application;
 
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingData;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.Location;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto.SensingDataByKindRequest;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto.CreateDataRequest;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.application.MemberService;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.persistence.Member;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingKind;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.Measurement;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.nullcheck.NullSensingDataException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +28,13 @@ public class SensingDataService {
     @Transactional
     public Long save(final CreateDataRequest request) {
 
-        final SensingKind kind = SensingKind.of(request.sensingKind());
-        final Location location = Location.createLocation(request.building(), request.details());
+        final Measurement measurement = Measurement.of(request.sensingKind());
 
         final Member member = memberService.findById(request.memberId());
         final SensingData sensingData = SensingData.builder()
                 .member(member)
                 .sensingValue(request.value())
-                .kind(kind)
-                .location(location)
+                .measurement(measurement)
                 .build();
 
         sensingDataRepository.save(sensingData);
@@ -61,7 +58,7 @@ public class SensingDataService {
 
     public List<SensingData> findAllByMemberKind(final SensingDataByKindRequest request) {
 
-        final SensingKind sensingKind = SensingKind.of(request.kind());
-        return sensingDataRepository.findAllByMemberKind(sensingKind);
+        final Measurement measurement = Measurement.of(request.kind());
+        return sensingDataRepository.findAllByMemberKind(measurement);
     }
 }
