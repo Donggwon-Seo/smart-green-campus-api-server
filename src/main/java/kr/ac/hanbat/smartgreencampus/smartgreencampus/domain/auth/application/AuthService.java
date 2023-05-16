@@ -1,7 +1,6 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.application;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.web.dto.LoginRequest;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.web.dto.SignupRequest;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.persistence.Member;
@@ -10,7 +9,6 @@ import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.config.bcrypt.Encry
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.IllegalValueException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.duplicate.DuplicateMemberException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.nullcheck.NullMemberException;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.jwt.AuthorizationExtractor;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +28,6 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final EncryptHelper encryptHelper;
     private final JwtTokenProvider jwtTokenProvider;
-    private final AuthorizationExtractor authExtractor;
 
     @Transactional
     public Long signUpMember(final SignupRequest request) {
