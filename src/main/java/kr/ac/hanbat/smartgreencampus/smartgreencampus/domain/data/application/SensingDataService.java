@@ -9,11 +9,13 @@ import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.Me
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.nullcheck.NullSensingDataException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingDataRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class SensingDataService {
     @Transactional
     public Long save(final CreateDataRequest request) {
 
-        final Measurement measurement = Measurement.of(request.sensingKind());
+        final Measurement measurement = Measurement.of(request.measurement());
 
         final Member member = memberService.findById(request.memberId());
         final SensingData sensingData = SensingData.builder()
@@ -38,6 +40,10 @@ public class SensingDataService {
                 .build();
 
         sensingDataRepository.save(sensingData);
+        log.info(member.getName() + "님이 새로운 센싱 값을 저장했습니다." +
+                "\nmeasurement : " + sensingData.getMeasurement() +
+                "\nsensingValue: " + sensingData.getSensingValue());
+
         return sensingData.getId();
     }
 
