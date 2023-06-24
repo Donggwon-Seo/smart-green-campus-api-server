@@ -12,11 +12,9 @@ import lombok.NoArgsConstructor;
 public class DataDto {
     private Double value;
     private String kind;
-    private String maker;
 
     public DataDto(final SensingData data) {
         this.value = data.getSensingValue();
         this.kind = String.valueOf(data.getMeasurement());
-        this.maker = data.getMember().getName();
     }
 }

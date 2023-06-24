@@ -27,32 +27,18 @@ public class SensingData {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    /* 연관관계 편의 메서드 */
-    public void setMember(final Member member) {
-
-        this.member = member;
-        member.getSensingDataList().add(this);
-    }
 
     @Builder
     public SensingData(
             final Double sensingValue,
-            final Measurement measurement,
-            final Member member) {
+            final Measurement measurement) {
         this.sensingValue = sensingValue;
         this.measurement = measurement;
-        this.member = member;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
     /* 비즈니스 로직 */

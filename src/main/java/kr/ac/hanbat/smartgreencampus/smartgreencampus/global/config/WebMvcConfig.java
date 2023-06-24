@@ -15,17 +15,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     //TODO: MQTT pub-sub 담당이 인증처리 구현하면 주석 풀기
-//    @Override
-//    public void addInterceptors(final InterceptorRegistry registry){
-//        registry.addInterceptor(bearerAuthInterceptor)
-//
-//                .addPathPatterns("/api/members")
-//                .addPathPatterns("/api/members/**")
-//
-//                .addPathPatterns("/api/data")
-//                .addPathPatterns("/api/data/**")
-//
-//                .addPathPatterns("/api/auth/logout")
-//        ;
-//    }
+    @Override
+    public void addInterceptors(final InterceptorRegistry registry){
+        registry.addInterceptor(bearerAuthInterceptor)
+
+                .addPathPatterns("/api/members")
+                .addPathPatterns("/api/members/**")
+
+                .addPathPatterns("/api/data")
+                .addPathPatterns("/api/data/**")
+
+                .addPathPatterns("/api/auth/logout")
+        ;
+    }
 }

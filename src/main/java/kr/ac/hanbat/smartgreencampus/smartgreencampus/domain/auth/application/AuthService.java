@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -33,26 +32,17 @@ public class AuthService {
     public Long signUpMember(final SignupRequest request) {
 
         final Member member = Member.builder()
-                .name(request.name())
                 .email(request.email())
                 .password(encryptHelper.encrypt(request.password1()))
                 .build();
 
         validateDuplicateEmail(request.email());
-        validateDuplicateNickname(request.name());
         memberRepository.save(member);
 
-        log.info(member.getName() + "님이 회원가입을 하셨습니다.");
+        log.info(member.getEmail() + "님이 회원가입을 하셨습니다.");
         return member.getId();
     }
 
-    private void validateDuplicateNickname(final String nickname) {
-        final List<Member> memberList = memberRepository.findValidateMemberByName(nickname);
-
-        if (memberList.size() > 0) {
-            throw new DuplicateMemberException("닉네임 중복");
-        }
-    }
 
     private void validateDuplicateEmail(final String email) {
         final Optional<Member> member = memberRepository.findByEmail(email);
@@ -74,7 +64,7 @@ public class AuthService {
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
 
-        log.info(member.getName() + "님이 로그인 하셨습니다.");
-        return jwtTokenProvider.createToken(member.getName());
+        log.info(member.getEmail() + "님이 로그인 하셨습니다.");
+        return jwtTokenProvider.createToken(member.getEmail());
     }
 }

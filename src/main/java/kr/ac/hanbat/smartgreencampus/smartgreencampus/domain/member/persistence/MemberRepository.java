@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    List<Member> findValidateMemberByName(final String name);
     Optional<Member> findByEmail(final String email);
 }

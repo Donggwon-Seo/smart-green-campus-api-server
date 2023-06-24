@@ -7,7 +7,6 @@ import lombok.Builder;
 
 @Builder
 public record SignupRequest(
-        @NotBlank String name,
 
         @NotBlank @Email(message = "이메일 형식에 맞지 않습니다.") String email,
 

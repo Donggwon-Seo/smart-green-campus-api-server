@@ -4,12 +4,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+#      ddl-auto: create
     properties:
       hibernate:
         #        show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
+#    defer-datasource-initialization: true
+
+#  sql:
+#    init:
+#      mode: always
 
 logging:
   level:

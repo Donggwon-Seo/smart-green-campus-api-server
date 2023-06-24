@@ -2,9 +2,10 @@ package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingData;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto.*;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.application.SensingDataService;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingData;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.persistence.SensingDataRepository;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto.*;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApi;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import lombok.RequiredArgsConstructor;
@@ -18,25 +19,25 @@ import java.util.stream.Collectors;
 public class SensingDataController {
 
     private final SensingDataService sensingDataService;
+    private final SensingDataRepository sensingDataRepository;
+
+    @SwaggerApi(summary = "데이터 단건 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
+    @GetMapping("/api/data/{id}")
+    public Result data(@PathVariable final Long id) {
+
+        SensingData sensingData = sensingDataRepository.findById(id).orElseThrow();
+        return new Result(new DataDto(sensingData));
+    }
+
 
     @SwaggerApi(summary = "데이터 목록 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
     @GetMapping("/api/data")
-    public Result data() {
+    public Result datas() {
 
-        return new Result(sensingDataService.findAllByMember().stream()
-                .map(data -> new DataDto(data))
-                .collect(Collectors.toList()));
-    }
-
-
-    @SwaggerApi(summary = "특정 종류의 데이터 목록 조회", implementation = Result.class)
-    @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/data/kinds")
-    public Result data(@RequestBody @Valid final SensingDataByKindRequest request) {
-
-        return new Result(sensingDataService.findAllByMemberKind(request).stream()
-                .map(data -> new DataDto(data))
+        return new Result(sensingDataRepository.findAll().stream()
+                .map(DataDto::new)
                 .collect(Collectors.toList()));
     }
 
@@ -57,7 +58,8 @@ public class SensingDataController {
             @RequestBody @Valid final UpdateDataRequest request) {
 
         sensingDataService.update(id, request.value());
-        final SensingData sensingData = sensingDataService.findById(id);
+        final SensingData sensingData = sensingDataRepository.findById(id)
+                .orElseThrow();
 
         return new UpdateDataResponse(sensingData.getId());
     }
