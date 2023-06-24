@@ -5,14 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.application.AuthService;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.web.dto.SignupRequest;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.web.dto.SignupResponse;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.web.dto.LoginRequest;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.web.dto.LoginResponse;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApi;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApiFailWithAuth;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.SwaggerApiFailWithoutAuth;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.IllegalValueException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.jwt.AuthorizationExtractor;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -32,16 +29,16 @@ public class AuthController {
     private final AuthorizationExtractor authExtractor;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @SwaggerApi(summary = "회원 가입", implementation = SignupResponse.class)
-    @SwaggerApiFailWithoutAuth
-    @PostMapping("/api/auth/signup")
-    public ResponseEntity<SignupResponse> signupMember(@RequestBody @Valid final SignupRequest request) {
-
-        if (!request.password1().equals(request.password2())) {
-            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
-        }
-        return ResponseEntity.ok(new SignupResponse(authService.signUpMember(request)));
-    }
+//    @SwaggerApi(summary = "회원 가입", implementation = SignupResponse.class)
+//    @SwaggerApiFailWithoutAuth
+//    @PostMapping("/api/auth/signup")
+//    public ResponseEntity<SignupResponse> signupMember(@RequestBody @Valid final SignupRequest request) {
+//
+//        if (!request.password1().equals(request.password2())) {
+//            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
+//        }
+//        return ResponseEntity.ok(new SignupResponse(authService.signUpMember(request)));
+//    }
 
 
     @SwaggerApi(summary = "로그인", implementation = ResponseEntity.class)
@@ -56,14 +53,14 @@ public class AuthController {
     @SwaggerApi(summary = "로그아웃", implementation = ResponseEntity.class)
     @SwaggerApiFailWithAuth
     @PostMapping("/api/auth/logout")
-    public ResponseEntity<Void> logoutMember(HttpServletRequest request) {
+    public ResponseEntity<?> logoutMember(HttpServletRequest request) {
         final String token = authExtractor.extract(request, "Bearer");
 
         try {
             jwtTokenProvider.addBlackList(token);
             log.info(jwtTokenProvider.getSubject(token) + "님이 로그아웃 하셨습니다.");
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("logout success!");
         } catch (IllegalAccessException exception) {
             /* do nothing */
             return ResponseEntity.badRequest().build();

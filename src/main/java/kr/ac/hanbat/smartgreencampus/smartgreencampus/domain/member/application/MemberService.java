@@ -16,23 +16,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    /** 회원 이름 수정 */
-    @Transactional
-    public void update(final Long memberId, final String name) {
-
-        Member member = findById(memberId);
-        member.update(name);
-    }
-
     /** 회원 탈퇴 */
     @Transactional
     public void deleteMember(final Long id) {
 
-        Member member = findById(id);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(NullMemberException::new);
         memberRepository.delete(member);
-    }
-
-    public Member findById(final Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(NullMemberException::new);
     }
 }

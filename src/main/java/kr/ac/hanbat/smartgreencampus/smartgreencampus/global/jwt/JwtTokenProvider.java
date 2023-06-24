@@ -16,30 +16,24 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final String secretKey;
-    private final long validityInMilliseconds;
 
     @Autowired private BlackListRepository blackListRepository;
 
     public JwtTokenProvider(
-            @Value("${security.jwt.token.secret-key}") final String secretKey,
-            @Value("${security.jwt.token.expire-length}") final long validityInMilliseconds) {
+            @Value("${security.jwt.token.secret-key}") final String secretKey) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        this.validityInMilliseconds = validityInMilliseconds;
     }
 
-    public String createToken(final String subject) {
+    public String createToken(final String subject) { //email
         Claims claims = Jwts.claims().setSubject(subject);
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
         log.info("now: {}", now);
-        log.info("validity: {}", validity);
 
 
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
@@ -63,11 +57,6 @@ public class JwtTokenProvider {
     public boolean validateToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-
-            /** 만료시간이 지났을 경우 */
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
 
             /** 로그아웃 요청한 토큰(= 블랙리스트에 포함)일 경우 */
             if (blackListRepository.existsByToken(token)) {
