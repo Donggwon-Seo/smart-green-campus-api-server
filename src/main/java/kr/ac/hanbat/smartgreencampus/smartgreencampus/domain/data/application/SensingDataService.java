@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Slf4j
 @Service
@@ -23,17 +25,18 @@ public class SensingDataService {
      * 데이터 저장
      */
     @Transactional
-    public Long save(final CreateDataRequest request) {
+    public void save(final CreateDataRequest request) {
 
-        final SensingData sensingData = SensingData.builder()
-                .sensingValue(request.value())
-                .measurement(Measurement.of(request.measurement()))
-                .build();
+        final var requestData = request.getDataList();
 
-        sensingDataRepository.save(sensingData);
-        log.info("measurement : {}, value : {}", request.measurement(), request.value());
+        final List<SensingData> dataList = requestData.stream()
+                .map(data -> SensingData.builder()
+                        .sensingValue(data.value())
+                        .measurement(Measurement.valueOf(data.measurement()))
+                        .build())
+                .toList();
 
-        return sensingData.getId();
+        sensingDataRepository.saveAll(dataList);
     }
 
     /* 데이터 값 수정 */
