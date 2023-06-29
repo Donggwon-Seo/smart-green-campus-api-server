@@ -42,11 +42,11 @@ public class SensingDataController {
     }
 
 
-    @SwaggerApi(summary = "데이터 등록", implementation = CreateDataResponse.class)
+    @SwaggerApi(summary = "데이터 등록")
     @SwaggerApiFailWithoutAuth
     @PostMapping("/api/data")
-    public CreateDataResponse saveData(@RequestBody @Valid final CreateDataRequest request) {
-        return new CreateDataResponse(sensingDataService.save(request));
+    public void saveData(@RequestBody @Valid final CreateDataRequest request) {
+        sensingDataService.save(request);
     }
 
 

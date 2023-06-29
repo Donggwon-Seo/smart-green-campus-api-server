@@ -1,7 +1,18 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.data.web.dto;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
-public record CreateDataRequest(
-        @NotNull Double value,
-        @NotNull String measurement) { }
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+public class CreateDataRequest {
+
+    List<Data> dataList = new ArrayList<>();
+
+    public CreateDataRequest(List<Data> dataList) {
+        this.dataList = dataList;
+    }
+
+    public record Data(Double value, String measurement) { }
+}
