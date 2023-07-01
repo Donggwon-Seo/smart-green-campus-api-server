@@ -14,7 +14,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         this.bearerAuthInterceptor = bearerAuthInterceptor;
     }
 
-    //TODO: MQTT pub-sub 담당이 인증처리 구현하면 주석 풀기
     @Override
     public void addInterceptors(final InterceptorRegistry registry){
         registry.addInterceptor(bearerAuthInterceptor)
