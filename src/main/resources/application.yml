@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: jwt, postgresql
+    include: jwt, postgresql, slack
 
   jpa:
     hibernate:
