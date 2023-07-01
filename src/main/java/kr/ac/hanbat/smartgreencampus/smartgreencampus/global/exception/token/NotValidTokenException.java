@@ -1,27 +1,17 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.token;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.BusinessException;
 
-@ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "유효하지 않은 토큰")
-public class NotValidTokenException extends RuntimeException {
+public class NotValidTokenException extends BusinessException {
+
+    private static final String MESSAGE = "유효하지 않은 토큰입니다.";
+
     public NotValidTokenException() {
-        super();
+        super(MESSAGE);
     }
 
-    public NotValidTokenException(String message) {
-        super(message);
-    }
-
-    public NotValidTokenException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NotValidTokenException(Throwable cause) {
-        super(cause);
-    }
-
-    protected NotValidTokenException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public int getStatusCode() {
+        return 400;
     }
 }

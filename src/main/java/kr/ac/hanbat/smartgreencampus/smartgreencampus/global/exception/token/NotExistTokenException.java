@@ -1,27 +1,17 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.token;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.BusinessException;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "토큰이 존재하지 않음")
-public class NotExistTokenException extends RuntimeException {
+public class NotExistTokenException extends BusinessException {
+
+    private static final String MESSAGE = "토큰이 존재하지 않습니다.";
+
     public NotExistTokenException() {
-        super();
+        super(MESSAGE);
     }
 
-    public NotExistTokenException(String message) {
-        super(message);
-    }
-
-    public NotExistTokenException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NotExistTokenException(Throwable cause) {
-        super(cause);
-    }
-
-    protected NotExistTokenException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public int getStatusCode() {
+        return 401;
     }
 }
