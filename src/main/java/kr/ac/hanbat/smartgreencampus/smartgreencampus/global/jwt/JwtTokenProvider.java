@@ -72,13 +72,11 @@ public class JwtTokenProvider {
     public void addBlackList(final String token) throws IllegalAccessException {
 
         if (blackListRepository.existsByToken(token)) {
-            log.error("이미 로그아웃된 토큰입니다.");
-            throw new IllegalTokenException("이미 로그아웃된 토큰입니다.");
+            throw new IllegalTokenException();
         }
 
         if (!validateToken(token)) {
-            log.error("유효하지 않은 토큰");
-            throw new NotExistTokenException("토큰이 존재하지 않음");
+            throw new NotExistTokenException();
         }
 
         blackListRepository.save(BlackList.builder()

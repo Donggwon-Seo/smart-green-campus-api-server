@@ -6,7 +6,7 @@ import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.auth.web.dto.Signup
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.persistence.Member;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.domain.member.persistence.MemberRepository;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.config.bcrypt.EncryptHelper;
-import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.IllegalValueException;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.illegal.IllegalValueException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.duplicate.DuplicateMemberException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.nullcheck.NullMemberException;
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.jwt.JwtTokenProvider;
@@ -48,7 +48,7 @@ public class AuthService {
         final Optional<Member> member = memberRepository.findByEmail(email);
 
         if (member.isPresent()) {
-            throw new DuplicateMemberException("이메일 중복.");
+            throw new DuplicateMemberException();
         }
     }
 
@@ -61,7 +61,7 @@ public class AuthService {
 
         if (!encryptHelper.isMatch(request.password(), member.getPassword())) {
             log.error("비밀번호가 일치하지 않습니다.");
-            throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
+            throw new IllegalValueException();
         }
 
         log.info(member.getEmail() + "님이 로그인 하셨습니다.");

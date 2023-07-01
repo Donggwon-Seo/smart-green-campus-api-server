@@ -1,22 +1,17 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.token;
 
-public class IllegalTokenException extends RuntimeException {
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.BusinessException;
+
+public class IllegalTokenException extends BusinessException {
+
+    private static final String MESSAGE = "이미 로그아웃된 토큰입니다.";
+
     public IllegalTokenException() {
+        super(MESSAGE);
     }
 
-    public IllegalTokenException(String message) {
-        super(message);
-    }
-
-    public IllegalTokenException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public IllegalTokenException(Throwable cause) {
-        super(cause);
-    }
-
-    public IllegalTokenException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public int getStatusCode() {
+        return 401;
     }
 }

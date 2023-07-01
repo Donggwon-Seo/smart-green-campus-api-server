@@ -1,27 +1,17 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.duplicate;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.BusinessException;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "duplicate entity")
-public class DuplicateMemberException extends RuntimeException {
+public class DuplicateMemberException extends BusinessException {
+
+    private static final String MESSAGE = "이미 존재하는 회원입니다.";
+
     public DuplicateMemberException() {
-        super();
+        super(MESSAGE);
     }
 
-    public DuplicateMemberException(String message) {
-        super(message);
-    }
-
-    public DuplicateMemberException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public DuplicateMemberException(Throwable cause) {
-        super(cause);
-    }
-
-    protected DuplicateMemberException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public int getStatusCode() {
+        return 409;
     }
 }

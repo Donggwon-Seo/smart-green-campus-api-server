@@ -1,22 +1,17 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.nullcheck;
 
-public class NullMemberException extends RuntimeException {
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.BusinessException;
+
+public class NullMemberException extends BusinessException {
+
+    private static final String MESSAGE = "존재하지 않는 회원입니다.";
+
     public NullMemberException() {
+        super(MESSAGE);
     }
 
-    public NullMemberException(String message) {
-        super(message);
-    }
-
-    public NullMemberException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NullMemberException(Throwable cause) {
-        super(cause);
-    }
-
-    public NullMemberException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public int getStatusCode() {
+        return 404;
     }
 }

@@ -2,11 +2,11 @@ package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.illegal;
 
 import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.BusinessException;
 
-public class IllegalValueException extends BusinessException {
+public class InvalidArgumentException extends BusinessException {
 
-    private static final String MESSAGE = "비밀번호가 일치하지 않습니다.";
+    private static final String MESSAGE = "잘못된 요청입니다.";
 
-    public IllegalValueException() {
+    public InvalidArgumentException() {
         super(MESSAGE);
     }
 

@@ -1,22 +1,17 @@
 package kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.nullcheck;
 
-public class NullSensingDataException extends RuntimeException {
+import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.exception.BusinessException;
+
+public class NullSensingDataException extends BusinessException {
+
+    private static final String MESSAGE = "존재하지 않는 데이터입니다.";
+
     public NullSensingDataException() {
+        super(MESSAGE);
     }
 
-    public NullSensingDataException(String message) {
-        super(message);
-    }
-
-    public NullSensingDataException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NullSensingDataException(Throwable cause) {
-        super(cause);
-    }
-
-    public NullSensingDataException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public int getStatusCode() {
+        return 404;
     }
 }
