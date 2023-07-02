@@ -37,6 +37,15 @@ jobs:
         echo "${{ secrets.HARANG_JWT }}" >> ./application-jwt.yml
         
         cat ./application-jwt.yml
+        
+    - name: make application-postgresql.yml
+      run:
+        cd ./src/main/resources
+        touch ./application-postgresql.yml
+        
+        echo "${{ secrets.HARANG_POSTGRESQL }}" >> ./application-postgresql.yml
+        
+        cat ./application-postgresql.yml
       
       shell: bash
 
