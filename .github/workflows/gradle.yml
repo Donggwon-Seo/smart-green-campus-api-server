@@ -32,6 +32,7 @@ jobs:
     - name: make application-jwt.yml
       run:
         cd ./src/main/resources
+        
         touch ./application-jwt.yml
         
         echo "${{ secrets.HARANG_JWT }}" >> ./application-jwt.yml
@@ -41,6 +42,7 @@ jobs:
     - name: make application-postgresql.yml
       run:
         cd ./src/main/resources
+        
         touch ./application-postgresql.yml
         
         echo "${{ secrets.HARANG_POSTGRESQL }}" >> ./application-postgresql.yml
