@@ -14,17 +14,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
         this.bearerAuthInterceptor = bearerAuthInterceptor;
     }
 
-    @Override
-    public void addInterceptors(final InterceptorRegistry registry){
-        registry.addInterceptor(bearerAuthInterceptor)
-
-                .addPathPatterns("/api/members")
-                .addPathPatterns("/api/members/**")
-
-                .addPathPatterns("/api/data")
-                .addPathPatterns("/api/data/**")
-
-                .addPathPatterns("/api/auth/logout")
-        ;
-    }
+//    @Override
+//    public void addInterceptors(final InterceptorRegistry registry){
+//        registry.addInterceptor(bearerAuthInterceptor)
+//
+//                .addPathPatterns("/api/members")
+//                .addPathPatterns("/api/members/**")
+//
+//                .addPathPatterns("/api/data")
+//                .addPathPatterns("/api/data/**")
+//
+//                .addPathPatterns("/api/auth/logout")
+//        ;
+//    }
 }

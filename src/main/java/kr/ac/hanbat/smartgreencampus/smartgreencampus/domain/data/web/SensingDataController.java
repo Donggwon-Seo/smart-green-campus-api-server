@@ -11,6 +11,8 @@ import kr.ac.hanbat.smartgreencampus.smartgreencampus.global.annotation.swagger.
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Tag(name = "센싱 데이터")
@@ -18,8 +20,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SensingDataController {
 
+
     private final SensingDataService sensingDataService;
     private final SensingDataRepository sensingDataRepository;
+
 
     @SwaggerApi(summary = "데이터 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
@@ -30,17 +34,12 @@ public class SensingDataController {
         return new Result(new DataDto(sensingData));
     }
 
-
-    @SwaggerApi(summary = "데이터 목록 조회", implementation = Result.class)
+    @SwaggerApi(summary = "데이터 목록 조회(influxDB)", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
     @GetMapping("/api/data")
-    public Result datas() {
-
-        return new Result(sensingDataRepository.findAll().stream()
-                .map(DataDto::new)
-                .collect(Collectors.toList()));
+    public List<Map<String, Object>> getData() {
+        return sensingDataService.queryData();
     }
-
 
     @SwaggerApi(summary = "데이터 등록")
     @SwaggerApiFailWithoutAuth
@@ -63,4 +62,6 @@ public class SensingDataController {
 
         return new UpdateDataResponse(sensingData.getId());
     }
+
+
 }

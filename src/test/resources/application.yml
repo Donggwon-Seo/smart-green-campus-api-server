@@ -1,4 +1,38 @@
+spring:
+  profiles:
+    include: jwt, postgresql, slack
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    #      ddl-auto: create
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+#    defer-datasource-initialization: true
+
+#  sql:
+#    init:
+#      mode: always
+
 logging:
   level:
     org.hibernate.SQL: debug
-    org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.core.LocalVariableTableParameterNameDiscoverer: error
+
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    groups:
+      enabled: true
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  paths-to-match:
+    - /**

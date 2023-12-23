@@ -1,11 +1,11 @@
 spring:
   profiles:
-    include: jwt, postgresql, slack
-
+#    include: jwt, postgresql, slack
+    include: jwt, influxdb, slack
   jpa:
     hibernate:
       ddl-auto: none
-#      ddl-auto: create
+    #      ddl-auto: create
     properties:
       hibernate:
         #        show_sql: true

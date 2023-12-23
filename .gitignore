@@ -11,6 +11,7 @@ h2
 *application-postgresql.yml*
 *data.sql*
 *application-slack.yml*
+*application-influxdb.yml*
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,intellij+all,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,intellij+all,java
@@ -194,3 +195,4 @@ out/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/application-influxdb.yml
