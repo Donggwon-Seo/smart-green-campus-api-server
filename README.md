@@ -6,13 +6,9 @@
 <br/>
 
 ###  각 학과의 역할
-- 건축학과 및 화학생명공학과 : 일조량, 습도 등을 측정합니다.
+- 건축학과 및 화학생명공학과 : 일조량, 습도 등을 측정하고, InfluxDB에 저장합니다.
 - 전자공학과 : 측정하는 과정에서 센서를 관리합니다.
-- 컴퓨터공학과 : 센싱한 데이터를 가공해 API 서버로 데이터를 송신합니다.
-  - [MQTT publisher server repository link](https://github.com/HBNU-smart-green-campus/mqtt_publisher)
-- 정보통신공학과 : 
-  - MQTT subscriber 팀 : MQTT broker로부터 수신한 데이터를 가공해 API server로 전송합니다.
-    - [MQTT subscriber server repository link](https://github.com/HBNU-smart-green-campus/smart-green-campus-mqtt-v3)
+- 정보통신공학과 
   - API server 팀 : 수신한 데이터를 DB에 저장하고, API를 제공합니다.
     - 현재 레포지토리 입니다.
   - Frontend server 팀 : API server로 필요한 데이터를 요청한 뒤, 해당 데이터를 가지고 웹 화면을 구성합니다.
@@ -38,3 +34,32 @@
 ## 💡 Document
 - API 설계도 
 - Setting file
+
+<br/>
+
+## 💡 Setting File
+##### src/main/resources에 아래의 설정 파일들을 설정해야 합니다.
+- application-slack.yml
+```
+slack:
+  webhook:
+    token: // your-slack token
+```
+
+- application-jwt.yml
+```
+security:
+  jwt:
+    token:
+      secret-key: // token secret key
+      expire-length: //token expire time 
+```
+
+- application-influxdb.yml
+```
+influxdb:
+  url: // InfluxDB url
+  token: // InfluxDB token
+  org: belab
+  bucket: belab
+  ```
